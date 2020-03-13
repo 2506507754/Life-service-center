@@ -1,0 +1,58 @@
+BODY
+{
+	FONT-FAMILY: "ËÎÌו";
+	FONT-SIZE: 9pt;
+	color: #005700;
+	text-decoration: none;
+
+}
+TD
+{
+	FONT-FAMILY: "ËÎÌו";
+	FONT-SIZE: 9pt;
+	color: #005700;
+
+}
+Input
+{
+	FONT-SIZE: 9pt;
+	HEIGHT: 20px;
+
+}
+Button
+{
+	FONT-SIZE: 9pt;
+	HEIGHT: 20px; 
+}
+Select
+{
+	FONT-SIZE: 9pt;
+	HEIGHT: 20px;
+
+}
+A
+{
+	COLOR: #005700;
+	TEXT-DECORATION: none
+}
+A:hover
+{
+	COLOR: #FF00FF;
+	TEXT-DECORATION: none
+}
+.title
+{
+	background:url(Images/topBar_bg.gif);
+}
+.border
+{
+	border: 1px solid #DCF2C1;
+
+
+}
+.tdbg{
+	background:#F5FEED;
+}
+.button {
+	  BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; FONT-SIZE: 9pt; BORDER-LEFT: 1px solid; COLOR: rgb(0,0,0); BORDER-BOTTOM: 1px solid; FONT-FAMILY: ËÎÌו; BACKGROUND-COLOR: #f9f9f9
+}

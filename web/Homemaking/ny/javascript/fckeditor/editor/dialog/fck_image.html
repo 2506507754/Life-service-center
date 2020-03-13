@@ -1,0 +1,454 @@
+<!--
+ * FCKeditor - The text editor for internet
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * 
+ * Licensed under the terms of the GNU Lesser General Public License:
+ * 		http://www.opensource.org/licenses/lgpl-license.php
+ * 
+ * For further information visit:
+ * 		http://www.fckeditor.net/
+ * 
+ * File Name: fck_image.html
+ * 	Image dialog window.
+ * 
+ * Version:  2.0 Beta 1
+ * Modified: 2004-05-31 23:07:51
+ * 
+ * File Authors:
+ * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+-->
+<html>
+	<head>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		<script type="text/javascript">
+var dialogArguments = window.parent.InnerDialogLoaded() ;
+var FCK = dialogArguments.FCK ;
+
+// Sets the Skin CSS
+document.write( '<link href="' + dialogArguments.FCKConfig.SkinPath + 'fck_dialog.css" type="text/css" rel="stylesheet">' ) ;
+
+var FCKConfig = dialogArguments.FCKConfig ;
+
+// Get browsing configuration
+var bCanBrowse = FCKConfig.ImageBrowser ;
+var sBrowseURL = FCKConfig.ImageBrowserURL ;
+var iBrowseWindowWidth  = FCKConfig.ImageBrowserWindowWidth ;
+var iBrowseWindowHeight = FCKConfig.ImageBrowserWindowHeight ;
+
+// Get upload configuration
+var bCanUpload = FCKConfig.ImageUpload && dialogArguments.BrowserInfo.IsIE55OrMore ;
+var sUploadURL = FCKConfig.ImageUploadURL ;
+var iUploadWindowWidth  = FCKConfig.ImageUploadWindowWidth ;
+var iUploadWindowHeight = FCKConfig.ImageUploadWindowHeight ;
+var sUploadAllowedExtensions = FCKConfig.ImageUploadAllowedExtensions ;
+
+// Gets the document DOM
+var oDOM = dialogArguments.FCK.EditorDocument ;
+
+// Gets the image if there is one selected.
+var image ;
+var e = FCK.Selection.GetSelectedElement( 'A' ) ; 
+if ( e && e.tagName == 'IMG' )
+	image = e ;
+
+// this var is used to update the existing image
+var imageSource = image ;
+
+// Gets a copy of the image (for image size purposes)
+var imageOriginal ;
+if (image != null)
+{
+	imageOriginal = new Image() ;
+	imageOriginal.src = image.src ;
+}
+else 
+	imageOriginal = null ;
+
+// Get the IMG tag.
+function getImageHtml()
+{
+	return '<IMG' 
+				+ attr("src", document.getElementById('txtURL').value)
+				+ attr("alt", document.getElementById('txtAlt').value) 
+				+ attr("align", document.getElementById('cmbAlign')[document.getElementById('cmbAlign').selectedIndex].value)
+				+ ((txtWidth.value)  ? attr("width" , document.getElementById('txtWidth').value)  : "")
+				+ ((txtHeight.value) ? attr("height", document.getElementById('txtHeight').value) : "")
+				+ ((txtVSpace.value) ? attr("vspace", document.getElementById('txtVSpace').value) : "")
+				+ ((txtHSpace.value) ? attr("hspace", document.getElementById('txtHSpace').value) : "")
+				+ ((txtBorder.value) ? attr("border", document.getElementById('txtBorder').value) : attr("border",0))
+				+ '/>' ;
+}
+
+// Returns a formatted image attribute. Used by getImageHtml(). 
+function attr(name, value) 
+{
+	if (!value || value == "") return "" ;
+	return ' ' + name + '="' + value + '"' ;
+}
+
+// Update any image (the selected or preview one)
+function updateImage(imgTarget)
+{
+	if ( document.getElementById('txtURL').value.length == 0 )
+		imgTarget.style.display = "none" ;
+	else
+	{
+		imgTarget.style.removeAttribute("display") ;
+		imgTarget.style.removeAttribute("height") ;
+		imgTarget.style.removeAttribute("width") ;
+
+		imgTarget.src = document.getElementById('txtURL').value ;
+		setAttribute(imgTarget, "alt"   , document.getElementById('txtAlt').value) ;		
+		setAttribute(imgTarget, "width" , document.getElementById('txtWidth').value) ;		
+		setAttribute(imgTarget, "height", document.getElementById('txtHeight').value) ;		
+		setAttribute(imgTarget, "vspace", document.getElementById('txtVSpace').value) ;		
+		setAttribute(imgTarget, "hspace", document.getElementById('txtHSpace').value) ;		
+		setAttribute(imgTarget, "border", document.getElementById('txtBorder').value) ;		
+		setAttribute(imgTarget, "align" , document.getElementById('cmbAlign').options[ document.getElementById('cmbAlign').selectedIndex ].value) ;
+	}
+}
+
+function setAttribute(element, attribute, value)
+{
+	if (value == null || value == "")
+		element.removeAttribute(attribute, 0) ;			// 0 = case insensitive
+	else 
+		element.setAttribute(attribute, value, 0) ;		// 0 = overwrite
+}
+
+// Fired when any field change to update the preview image.
+function updatePreview()
+{
+	updateImage(imgPreview) ;
+}
+
+// Fired when the user press the OK button
+function Ok()
+{
+	if ( document.getElementById('txtURL').value.length == 0 )
+	{
+		cancel() ;
+		return ;
+	}
+	
+	if ( imageSource == null )
+		window.returnValue = getImageHtml() ;
+	else
+	{
+		updateImage( imageSource ) ;
+		window.returnValue = null ;
+	}
+	window.close() ;
+}
+
+// Fired when the user load the window. It sets the fields with the
+// actual values if an image is selected in the editor.
+function setDefaults()
+{
+	// First of all, translate the dialog box texts
+	dialogArguments.FCKLanguageManager.TranslatePage(document) ;
+	
+	window.parent.AddTab( 'Info', 'Image Info' ) ;
+	window.parent.AddTab( 'Upload', 'Upload' ) ;
+
+	if (image == null) return ;
+
+	if (image.getAttribute("src",2)    != null) document.getElementById('txtURL').value    = image.getAttribute("src",2) ;
+	if (image.getAttribute("alt",2)    != null) document.getElementById('txtAlt').value    = image.getAttribute("alt",2) ;
+	if (image.getAttribute("vspace",2) != null) document.getElementById('txtVSpace').value = image.getAttribute("vspace",2) > 0 ? image.getAttribute("vspace",2) : "" ;
+	if (image.getAttribute("hspace",2) != null) document.getElementById('txtHSpace').value = image.getAttribute("hspace",2) > 0 ? image.getAttribute("hspace",2) : "" ;
+	if (image.getAttribute("border",2) != null) document.getElementById('txtBorder').value = image.getAttribute("border",2) ;
+
+	if ( image.style.getAttribute("pixelWidth") > 0 )
+		document.getElementById('txtWidth').value  = image.style.getAttribute("pixelWidth") ;
+	else if (image.getAttribute("width",2)  != null) 
+		document.getElementById('txtWidth').value  = image.getAttribute("width",2) ;
+		
+	if ( image.style.getAttribute("pixelHeight") > 0 )
+		document.getElementById('txtHeight').value  = image.style.getAttribute("pixelHeight") ;
+	else if (image.getAttribute("height",2) != null) 
+		document.getElementById('txtHeight').value = image.getAttribute("height",2) ;
+
+	if (image.getAttribute("align") != null) 
+		document.getElementById('cmbAlign').value = image.getAttribute("align") ;
+
+	updatePreview() ;
+}
+
+// Fired when the width or height input texts change
+function sizeChanged(axe) 
+{
+	// Verifies if the aspect ration has to be mantained
+	if (imageOriginal && document.getElementById('chkLockRatio').checked)
+	{
+		if ((axe) == "Width")
+		{
+			if ( document.getElementById('txtWidth').value != "") 
+			{
+				if (! isNaN(txtWidth.value))
+					document.getElementById('txtHeight').value = Math.round( imageOriginal.height * ( txtWidth.value  / imageOriginal.width ) ) ;
+			}
+			else
+				document.getElementById('txtHeight').value = "" ;
+		}
+		else
+			if (txtHeight.value != "")
+			{
+				if (! isNaN(txtHeight.value))
+					document.getElementById('txtWidth').value  = Math.round( imageOriginal.width  * ( document.getElementById('txtHeight').value / imageOriginal.height ) ) ;
+			}
+			else
+				document.getElementById('txtWidth').value = "" ;
+	}
+	
+	updatePreview() ;
+}
+
+// Fired when the Lock Ratio checkbox is clicked
+function onLockRationClick()
+{
+	sizeChanged("Width") ;
+}
+
+// Fired when the Reset Size button is clicked
+function resetSize()
+{
+	if (! imageOriginal) return ;
+
+	document.getElementById('txtWidth').value  = imageOriginal.width ;
+	document.getElementById('txtHeight').value = imageOriginal.height ;
+	updatePreview() ;
+}
+
+// Fired when the user click in the "Sent it to the Server" button.
+function uploadFile()
+{
+	var sFile = frmUpload.FCKeditor_File.value ;
+
+	if (sFile == "")
+	{
+		alert( dialogArguments.FCKLang["DlgImgAlertSelect"] ) ;
+		return ;
+	}
+	
+	var sExt = sFile.match( /\.[^\.]*$/ ) ;
+	sExt = sExt ? sExt[0].toLowerCase() : "." ;
+
+	if ( sUploadAllowedExtensions.indexOf( sExt ) < 0 )
+	{
+		alert( dialogArguments.FCKLang["DlgImgMsgWrongExt"] ) ; 
+		return ;
+	}
+
+	var oWindow = openNewWindow("", "UploadWindow", iUploadWindowWidth, iUploadWindowHeight) ;
+	frmUpload.submit() ;
+	oWindow.setImage = setImage ;
+}
+
+function browserServer()
+{
+	var oWindow = openNewWindow(sBrowseURL, "BrowseWindow", iBrowseWindowWidth, iBrowseWindowHeight) ;
+	oWindow.setImage = setImage ;
+}
+
+function openNewWindow(sURL, sName, iWidth, iHeight, bResizable, bScrollbars)
+{
+	var iTop  = (screen.height - iHeight) / 2 ;
+	var iLeft = (screen.width  - iWidth) / 2 ;
+	
+	var sOptions = "toolbar=no" ;
+	sOptions += ",width=" + iWidth ; 
+	sOptions += ",height=" + iHeight ;
+	sOptions += ",resizable="  + (bResizable  ? "yes" : "no") ;
+	sOptions += ",scrollbars=" + (bScrollbars ? "yes" : "no") ;
+	sOptions += ",left=" + iLeft ;
+	sOptions += ",top=" + iTop ;
+	
+	var oWindow = window.open(sURL, sName, sOptions)
+	oWindow.focus();
+	
+	return oWindow ;
+}
+
+function setImage(sImageURL)
+{
+	if (image != null)
+	{
+		image = new Image() ;
+		image.src = sImageURL ;
+	}
+	
+	imageOriginal = new Image() ;
+	imageOriginal.onload = resetSize ;
+	imageOriginal.src = sImageURL ;
+
+	document.getElementById('txtURL').value = sImageURL ;
+	updatePreview() ;
+}
+		</script>
+		<style type="text/css">
+			.ImagePreviewArea
+			{
+				border-right: #000000 1px solid;
+				padding-right: 5px;
+				border-top: #000000 1px solid;
+				padding-left: 5px;
+				padding-bottom: 5px;
+				overflow: auto;
+				border-left: #000000 1px solid;
+				width: 100%;
+				padding-top: 5px;
+				border-bottom: #000000 1px solid;
+				height: 150px;
+				background-color: #ffffff;
+			}
+		</style>
+	</head>
+	<body bottommargin="5" leftmargin="5" topmargin="5" rightmargin="5" onload="setDefaults()" scroll="no">
+		<table cellspacing="1" cellpadding="1" border="0" width="100%" class="dlg" height="100%">
+			<tr>
+				<td>
+					<table cellspacing="0" cellpadding="0" width="100%" border="0">
+						<tr>
+							<td valign="top" colspan="2">
+								<span fckLang="DlgImgURL">URL</span><br>
+								<input style="WIDTH: 100%" type="text" id="txtURL" onblur="updatePreview();">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table cellspacing="0" cellpadding="0" width="100%" border="0" style="DISPLAY: none" id="tableUpload">
+									<tr>
+										<form id="frmUpload" enctype="multipart/form-data" method="post" target="UploadWindow">
+											<td><span fckLang="DlgImgUpload">Upload</span><br>
+												<input style="WIDTH: 100%" type="file" name="FCKeditor_File" id="FCKeditor_File">
+											</td>
+									</tr>
+									<tr>
+										<td align="right">
+											<input id="btnUpload" type="button" fckLang="DlgImgBtnUpload" value="Send it to the Server"
+												onclick="uploadFile();">
+										</td>
+										</form>
+									</tr>
+								</table>
+							</td>
+							<td valign="middle" width="100">
+								<input type="button" style="DISPLAY: none; WIDTH: 100%" fckLang="DlgImgBtnBrowse" value="Browse Server"
+									onclick="browserServer();" id="btnBrowse">
+							</td>
+						</tr>
+					</table>
+					<hr width="100%" color="#000000" size="2">
+				</td>
+			</tr>
+			<tr>
+				<td><span fckLang="DlgImgAlt">Alternative Text</span><BR>
+					<input style="WIDTH: 100%" type="text" id="txtAlt" onkeyup="updatePreview();">
+				</td>
+			</tr>
+			<tr height="100%">
+				<td>
+					<table cellspacing="0" cellpadding="0" width="100%" border="0" height="100%">
+						<tr>
+							<td valign="top">
+								<br>
+								<table cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td><span fckLang="DlgImgWidth">Width</span>&nbsp;</td>
+										<td>
+											<input type="text" size="3" id="txtWidth" onkeyup="sizeChanged('Width');"></td>
+									</tr>
+									<tr>
+										<td><span fckLang="DlgImgHeight">Height</span>&nbsp;</td>
+										<td>
+											<input type="text" size="3" id="txtHeight" onkeyup="sizeChanged('Height');"></td>
+									</tr>
+								</table>
+								<input type="checkbox" class="CheckBox" checked id="chkLockRatio" onclick="onLockRationClick();">
+								<span fckLang="DlgImgLockRatio">Lock Ratio</span>
+								<br>
+								<input type="button" fckLang="DlgBtnResetSize" value="Reset Size" onclick="resetSize();"><br>
+								<br>
+								<table cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td><span fckLang="DlgImgBorder">Border</span>&nbsp;</td>
+										<td>
+											<input type="text" size="2" value="0" id="txtBorder" onkeyup="updatePreview();"></td>
+									</tr>
+									<tr>
+										<td><span fckLang="DlgImgHSpace">HSpace</span>&nbsp;</td>
+										<td>
+											<input type="text" size="2" id="txtHSpace" onkeyup="updatePreview();"></td>
+									</tr>
+									<tr>
+										<td><span fckLang="DlgImgVSpace">VSpace</span>&nbsp;</td>
+										<td>
+											<input type="text" size="2" id="txtVSpace" onkeyup="updatePreview();"></td>
+									</tr>
+									<tr>
+										<td><span fckLang="DlgImgAlign">Align</span>&nbsp;</td>
+										<td><select id="cmbAlign" onchange="updatePreview();">
+												<option value="" selected></option>
+												<option fckLang="DlgImgAlignLeft" value="left">Left</option>
+												<option fckLang="DlgImgAlignAbsBottom" value="absBottom">Abs Bottom</option>
+												<option fckLang="DlgImgAlignAbsMiddle" value="absMiddle">Abs Middle</option>
+												<option fckLang="DlgImgAlignBaseline" value="baseline">Baseline</option>
+												<option fckLang="DlgImgAlignBottom" value="bottom">Bottom</option>
+												<option fckLang="DlgImgAlignMiddle" value="middle">Middle</option>
+												<option fckLang="DlgImgAlignRight" value="right">Right</option>
+												<option fckLang="DlgImgAlignTextTop" value="textTop">Text Top</option>
+												<option fckLang="DlgImgAlignTop" value="top">Top</option>
+											</select></td>
+									</tr>
+								</table>
+							</td>
+							<td>&nbsp;&nbsp;&nbsp;</td>
+							<td width="100%">
+								<table cellpadding="0" cellspacing="0">
+									<tr>
+										<td><span fckLang="DlgImgPreview">Preview</span></td>
+									</tr>
+									<tr>
+										<td valign="top">
+											<div class="ImagePreviewArea">
+												<img id="imgPreview" style="DISPLAY: none">Magnus es, domine, et laudabilis 
+												valde: magna virtus tua, et sapientiae tuae non est numerus. et laudare te vult 
+												homo, aliqua portio creaturae tuae, et homo circumferens mortalitem suam, 
+												circumferens testimonium peccati sui et testimonium, quia superbis resistis: et 
+												tamen laudare te vult homo, aliqua portio creaturae tuae.tu excitas, ut laudare 
+												te delectet, quia fecisti nos ad te et inquietum est cor nostrum, donec 
+												requiescat in te. da mihi, domine, scire et intellegere, utrum sit prius 
+												invocare te an laudare te, et scire te prius sit an invocare te. sed quis te 
+												invocat nesciens te? aliud enim pro alio potest invocare nesciens. an potius 
+												invocaris, ut sciaris? quomodo autem invocabunt, in quem non crediderunt? aut 
+												quomodo credent sine praedicante? et laudabunt dominum qui requirunt eum. 
+												quaerentes enim inveniunt eum et invenientes laudabunt eum. quaeram te, domine, 
+												invocans te, et invocem te credens in te: praedicatus enim es nobis. invocat 
+												te, domine, fides mea, quam dedisti mihi, quam inspirasti mihi per humanitatem 
+												filii tui, per ministerium praedicatoris tui.
+											</div>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<script type="text/javascript">
+<!--
+	if (bCanUpload)
+	{
+		tableUpload.style.display = "block" ;
+		frmUpload.action = sUploadURL ;
+	}
+	
+	if (bCanBrowse)
+		btnBrowse.style.display = "block" ;
+//-->
+</script>
+	</body>
+</html>

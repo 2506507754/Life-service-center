@@ -1,0 +1,32 @@
+table,input,select{color:buttontext;font-size:12px;cursor:default}
+.outdiv{
+width:100%;border-right:1px solid buttonshadow;
+border-left:1px solid buttonhighlight;
+border-bottom:1px solid buttonshadow;
+border-top:1px solid buttonshadow}
+
+.indiv{
+background:buttonface;
+border-right:1px solid buttonface; border-left:1px solid buttonface;
+border-bottom:1px solid buttonface; border-top:1px solid buttonhighlight}
+
+.handbtn{
+background:buttonface;
+border-right:1px solid buttonshadow;border-left:1px solid buttonhighlight;
+border-bottom:1px solid buttonshadow;border-top:1px solid buttonhighlight}
+
+.btntd{height:20px;border:1px solid buttonface;behavior:url(../../css/9.htc);padding:3px 1px 0px 2px;}
+
+.handbtn{width:3px;height:21px}
+.toolbarleft1{width:100%;border-right:1px solid buttonface}
+.toolbarleft2{width:100%}
+.toolbaright1{border-left:1px solid buttonhighlight;background-color:#FFFFFF;padding:0px 3px 0px 1px}
+.toolbaright2{padding:1px}
+.bitbtn{height:20px;border:1px solid buttonface;behavior:url(../../css/9.htc);padding:0px 3px}
+.barbtn{behavior:url(../../css/9.htc);width:16px;padding:2px 2px 0px 2px;font-weight:bold}
+.barmenu{width:130px}
+.sepbtn1,.sepbtn2,.sepbtn3{width:2px;border-left:1px solid buttonshadow;border-right:1px solid buttonhighlight}
+.sepbtn1{height:21px}
+.sepbtn2{height:18px}
+.sepbtn3{height:116px}
+.sep td{border-top:1px solid buttonhighlight;width:35px;background:buttonshadow;border-bottom:1px solid buttonface}

@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Homemaking:war exploded">
+    <output-path>E:/Program Files/tomcat/apache-tomcat-8.5.50/webapps/homemaking</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="Homemaking/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Homemaking" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

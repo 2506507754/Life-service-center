@@ -1,0 +1,50 @@
+<!--
+ * FCKeditor - The text editor for internet
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * 
+ * Licensed under the terms of the GNU Lesser General Public License:
+ * 		http://www.opensource.org/licenses/lgpl-license.php
+ * 
+ * For further information visit:
+ * 		http://www.fckeditor.net/
+ * 
+ * File Name: frmresourcetype.html
+ * 	This page shows the list of available resource types.
+ * 
+ * Version:  2.0 Beta 1
+ * Modified: 2004-05-31 23:07:53
+ * 
+ * File Authors:
+ * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link href="Browser.css" type="text/css" rel="stylesheet">
+		<script language="javascript">
+
+function SetResourceType( type )
+{
+	window.parent.frames["frmFolders"].SetResourceType( type ) ;
+}
+
+		</script>
+	</head>
+	<body bottomMargin="0" topMargin="0">
+		<table height="100%" cellSpacing="0" cellPadding="0" width="100%" border="0">
+			<tr>
+				<td nowrap>
+					Resource Type<BR>
+					<select style="WIDTH: 100%" onchange="SetResourceType(this.value);">
+						<option value="File" selected>File</option>
+						<option value="Image">Image</option>
+						<option value="Flash">Flash</option>
+						<option value="Media">Media</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

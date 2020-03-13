@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<script type="text/javascript" src="../js/dtree/dtree.js" ></script>
+	<link rel="StyleSheet" href="../js/dtree/dtree.css" type="text/css" />
+
+<link href="../css/index.css" rel="stylesheet" type="text/css">
+<script>
+	function showsubmenu(id,id1,cc){//id为图片的ID，idl是DIV的ID，cc为是否动，y就动，n就不动
+
+		var whichEl = document.getElementById(id);
+		var whichEl1 = document.getElementById(id1);
+		var divOb = document.getElementsByTagName("div");
+		var imgOb = document.getElementsByTagName("img");
+		for(var j=0; j<imgOb.length; j++){
+			if(imgOb[j].src.indexOf('an_2a.gif')>0){
+				imgOb[j].src = '../image/an_1.gif';
+			}
+		}
+		for (var i=0; i<divOb.length; i++){
+			if(divOb[i].id==id1 && divOb[i].style.visibility=='hidden' && cc=='y'){
+				whichEl.src = '../image/an_2a.gif';
+			}		
+		}
+	}
+</script>
+</head>
+
+<body style=" background-color:#ffffff">
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="where">
+      <tr>
+        <td align="center" ><strong>公司管理</strong></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><table width="159" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+            <div id="me" class="dtree">
+                
+
+	<script type="text/javascript">
+		<!--
+
+		d = new dTree('d'); //创建一个树对象
+   //添加各级菜单
+   //注意查看add()函数
+   /*
+   第一个参数，表示当前节点的ID      
+   第二个参数，表示当前节点的父节点的ID,根节点的值为 -1     
+   第三个参数，节点要显示的文字      
+   第四个参数，节点的Url      
+   第五个参数，鼠标移至该节点时节点的Title      
+   第六个参数，节点的target 
+   第七个参数，用做节点的图标,节点没有指定图标时使用默认值 
+   第八个参数，用做节点打开的图标,节点没有指定图标时使用默认值 
+   第九个参数，判断节点是否打开
+   */  
+   d.add(0,-1,'公司管理'); //根级 
+   d.add(1,0,'96909中心','../xnzhgl/dszhzx.htm','96909中心','right','','','');
+   d.add(2,0,'公司管理','','公司管理','','','','');
+   d.add(3,2,'千福家政公司','../xnzhgl/dszhzx.htm','千福家政公司','right','','','');
+   document.write(d);
+   d.openTo(3,true); //默认ID为9的节点被选中
+		//-->
+	</script>
+</div>
+
+</td>
+          </tr>
+        </table></td>
+      </tr>
+    </table>    </td>
+  </tr>
+</table>
+<script>
+	function showtree(num)
+	{
+		var me=document.getElementById("me");
+		var me1=document.getElementById("me1");
+		if(num==1)
+		{
+			me.style.display="";
+			me1.style.display="none";
+			
+		}else
+		{
+			me.style.display="none";
+			me1.style.display="";
+			f.closeAll();
+		}
+	}
+
+</script>
+</body>
+</html>

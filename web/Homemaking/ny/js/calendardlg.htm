@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>
+日期选择
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+</head>
+<body onload="fload()" bgcolor='#3366CC'>
+<script src=calendardlg.script></script>
+<script>
+function fload()
+{
+	fPopCalendar(document.tmp.txt1, document.tmp.txt1);
+}
+
+function fkeydown()
+{
+	if(event.keyCode==27){
+		event.returnValue = null;
+		window.returnValue = null;
+		window.close();
+	}
+}
+
+document.onkeydown=fkeydown;
+</script>
+<form name="tmp">
+<input type=text id="txt1" style="display:none">
+</form>
+</body>
+</html>
